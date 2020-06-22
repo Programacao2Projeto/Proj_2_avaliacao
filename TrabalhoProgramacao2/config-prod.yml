@@ -1,0 +1,11 @@
+logging:
+  level: INFO
+  loggers:
+    com.trainingcenter: DEBUG
+
+database:
+  driverClass: com.mysql.cj.jdbc.Driver
+  user: ipbuta68_mack
+  password: mackenzie
+  url: jdbc:mysql://162.241.2.243:3306/ipbuta68_mackenzie
+  validationQuery: "SELECT 1"
