@@ -1,5 +1,4 @@
 package com.trainingcenter.api;
-
 import java.util.Date;
 
 public class Youtube {

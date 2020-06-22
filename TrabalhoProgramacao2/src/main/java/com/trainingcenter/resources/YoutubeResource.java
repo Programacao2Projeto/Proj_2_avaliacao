@@ -12,6 +12,10 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class YoutubeResource {
 
+    public YoutubeResource(){
+
+    }
+
     YoutubeDao youtubeDao;
     public YoutubeResource(YoutubeDao youtubeDao) {
         this.youtubeDao = youtubeDao;

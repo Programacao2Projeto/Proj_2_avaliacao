@@ -3,6 +3,7 @@ package com.trainingcenter;
 import com.trainingcenter.db.YoutubeDao;
 import com.trainingcenter.resources.YoutubeResource;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.migrations.MigrationsBundle;
@@ -23,9 +24,14 @@ public class ProductServiceApplication extends Application<ProductServiceConfigu
 
     @Override
     public void initialize(final Bootstrap<ProductServiceConfiguration> bootstrap) {
+        bootstrap.addBundle(new AssetsBundle("/html", "/site", "index.html"));
         bootstrap.addBundle(new MigrationsBundle<ProductServiceConfiguration>() {
             @Override
             public void run(ProductServiceConfiguration productServiceConfiguration, Environment environment) throws Exception {
+                YoutubeResource yts = new YoutubeResource();
+                environment.jersey().register(yts);
+
+                environment.jersey().setUrlPattern("/api/*");
             }
 
             @Override
