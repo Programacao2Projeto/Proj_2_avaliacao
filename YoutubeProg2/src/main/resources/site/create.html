@@ -25,9 +25,6 @@
 <table class="table" style="margin-left:25px; margin-rigth:25px">
     <tr>
     </tr>
-    <tbody>
-    <td style= "font-family: 'Lucida Console', Monaco, monospace; font-size: 15px">ID:</td>
-    <td type="text" id="idVideo"></td>
     <tr>
         <td style= "font-family: 'Lucida Console', Monaco, monospace; font-size: 15px">Nome Vídeo:</td>
         <td><input type="text" id="txtNomeVideo"></td>
@@ -40,15 +37,15 @@
 </table>
 <p style="font-weight:bold" id="mensagem"></p>
 <script>
-         const textoNome = document.querySelector('#txtVideo');
-         const textoCanal = document.querySelector('#txtCanal');
+         const textoNome = document.querySelector('#txtNomeVideo');
+         const textoCanal = document.querySelector('#txtNomeCanal');
          const paragrafoMensagem = document.querySelector('#mensagem');
 
             function mostrarMensagem(videoCadastrado)
              {
                     textoNome.value = '';
                     textoCanal.value = '';
-                    paragrafoMensagem.innerHTML = 'Video criado com id ' + videoCadastrado.id;
+                    paragrafoMensagem.innerHTML = 'Vídeo criado com Sucesso!' ;
               }
 
             async function criarVideo() {
