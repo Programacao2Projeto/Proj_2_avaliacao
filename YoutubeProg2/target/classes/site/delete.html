@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Deletar Video</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body style="background-color: #FCFCFC; text-align: center;padding:50px">
+<p><a href="/index.html">&lt; Voltar para página inicial</a></p>
+<h1>Apagar Video</h1>
+<table class="table" style="margin-left:25px; margin-rigth:25px">
+    <tr>
+    </tr>
+    <tbody>
+    <td>ID:</td>
+    <td id="idVideo"></td>
+    <tr>
+        <td>Nome do Video:</td>
+        <td id="nomevideo"></td>
+    </tr>
+    <tr>
+        <td>Nome do Canal:</td>
+        <td id="nomecanal"></td>
+    </tr>
+    <tr><td></td><td><input type="button" onclick="apagarVideo()" class="btn btn-dark" value="Apagar"></td></tr>
+    </tbody>
+</table>
+<p style="font-weight:bold" id="mensagem"></p>
+<table class='table' style='margin-left:25px; margin-rigth:25px'>
+    <tr>
+        <th>ID</th>
+        <th>Nome Video</th>
+        <th>Nome Canal</th>
+    </tr>
+    <tbody id="videos">
+    </tbody>
+</table>
+
+<script>
+        const corpoTabela = document.querySelector('#videos');
+        const paragrafoMensagem = document.querySelector('#mensagem');
+        const celulaNomeVideo = document.querySelector('#nomevideo');
+        const celulaNomeCanal = document.querySelector('#nomecanal');
+        const celulaID = document.querySelector('#idVideo');
+
+        function inicializar() {
+            paragrafoMensagem.innerHTML = 'Selecione um videos:'
+            celulaID.innerHTML = '';
+            celulaNomeVideo.innerHTML = '';
+            celulaNomeCanal.innerHTML = '';
+            listarTodosVideos();
+        }
+
+
+        function selecionarVideo(id, nome, canal) {
+                paragrafoMensagem.innerHTML = 'Pressione o botão Apagar para remover o video.'
+                celulaID.innerHTML = id;
+                celulaNomeVideo.innerHTML = nome;
+                celulaNomeCanal.innerHTML = canal;
+        }
+
+
+        async function apagarVideo() {
+            if (celulaID.innerHTML == '') return;
+            const ID = celulaID.innerHTML;
+            const URL = `/api/videos/${ID}`;
+            const deleteRequest = {
+                method:'DELETE'
+        };
+            try {
+                fetch(URL, deleteRequest).then(resposta => inicializar());
+            } catch (e) {
+            corpoTabela.innerHTML = e;
+        }
+    }
+
+        function preencherTabela(videos) {
+                var linhasTabela = '';
+                var n = videos.length;
+                for (var i = 0; i < n; i++) {
+                    var video = videos[i];
+                    linhasTabela +=
+                    `<tr><td><a href="javascript:void(0)" class="btn btn-dark" onclick="selecionarVideo('${video.id}','${video.nomevideo}','${video.nomecanal}')">`
+                    + video.id + '</a></td>' +
+                    '<td>' + video.nomevideo + '</td>' +
+                    '<td>' + video.nomecanal + '</td></tr>\n';
+        }
+            corpoTabela.innerHTML = linhasTabela;
+        }
+
+
+        async function listarTodosVideos() {
+            const URL = `/api/videos`;
+                try {
+                    fetch(URL).then(resposta => resposta.json()).then(jsonResponse => preencherTabela(jsonResponse));
+                } catch (e) {
+            corpoTabela.innerHTML = e;
+         }
+}
+inicializar();
+</script>
+</body>
+</html>

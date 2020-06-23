@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Youtube Lista Videos</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body  style="background-color:#FCFCFC; text-align: center; padding:50px">
+<p><a href="/index.html">&lt; Voltar para página inicial</a></p>
+<h1 style="text-align:center">Videos</h1>
+<p style="font-weight:bold" id="contador"></p>
+<table class="table" style="margin-left:25px; margin-rigth:25px">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Nome do Video</th>
+        <th scope="col">Nome do Canal</th>
+    </tr>
+    </thead>
+    <tbody id="videos">
+    </tbody>
+</table>
+<script>
+        const corpoTabela = document.querySelector('#videos');
+        const contadorParagraph = document.querySelector('#contador');
+        function preencherTabela(videos) {
+            var linhasTabela = '';
+            var n = videos.length;
+            for (var i = 0; i < n; i++) {
+                var video = videos[i];
+                linhasTabela += '<tr><td>' + video.id     + '</td>' +
+                                    '<td>' + video.nomevideo   + '</td>' +
+                                    '<td>' + video.nomecanal + '</td></tr>\n';
+            }
+            corpoTabela.innerHTML = linhasTabela;
+            contadorParagraph.innerHTML = n + ' ' + (n==1?'video':'videos');
+        }
+        async function listarTodosVideos() {
+          const URL = `/api/videos`;
+          try {
+            fetch(URL).then(resposta => resposta.json()).then(jsonResponse => preencherTabela(jsonResponse));
+          } catch (e) {
+            corpoTabela.innerHTML = e;
+          }
+        }
+        listarTodosVideos();
+    </script>
+</body>
+</html>

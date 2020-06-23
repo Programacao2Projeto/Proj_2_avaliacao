@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Youtube Lista Videos</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body style="background-color: #FCFCFC; text-align: center;padding:50px">
+<p><a href="/index.html">&lt; Voltar para página inicial</a></p>
+<h1>Enviar video</h1>
+<table class="table" style="margin-left:25px; margin-rigth:25px">
+    <tbody>
+    <tr>
+        <td>Nome Video:</td>
+        <td><input type="text" id="txtVideo"></td>
+    </tr>
+    <tr>
+        <td>Nome canal:</td>
+        <td><input type="text" id="txtCanal"></td>
+    </tr>
+    <tr><td></td><td><input type="button" class="btn btn-dark" onclick="criarProfessor()" value="Criar"></td></tr>
+    </tbody>
+</table>
+<p style="font-weight:bold" id="mensagem"></p>
+<script>
+         const textoNome = document.querySelector('#txtVideo');
+         const textoCanal = document.querySelector('#txtCanal');
+         const paragrafoMensagem = document.querySelector('#mensagem');
+
+            function mostrarMensagem(videoCadastrado)
+             {
+                    textoNome.value = '';
+                    textoCanal.value = '';
+                    paragrafoMensagem.innerHTML = 'Video criado com sucesso ';
+              }
+
+            async function criarProfessor() {
+            const URL = `/api/videos`;
+
+            const dadosVideo =
+             {
+            'nomevideo': textoNome.value,
+            'nomecanal': textoCanal.value
+            };
+
+           const postRequest =
+           {
+                    method:'POST',
+                    body: JSON.stringify(dadosVideo),
+                    headers: { 'Content-type': 'application/json;charset=UTF-8' }
+            };
+
+           try {
+                fetch(URL, postRequest).then(resposta => resposta.json()).then(jsonResponse => mostrarMensagem(jsonResponse));
+           } catch (e) {
+                        corpoTabela.innerHTML = e;
+                    }
+            }
+</script>
+</body>
+</html>
