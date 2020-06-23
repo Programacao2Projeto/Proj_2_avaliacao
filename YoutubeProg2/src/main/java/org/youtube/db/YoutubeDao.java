@@ -22,12 +22,12 @@ public class YoutubeDao {
     private String deleteSQL = "delete from youtube  where id = ?";
 
     private final MySQLConnection mysql = new MySQLConnection();//
+
     public int size(){
-
         List<Youtube> youtubeList = new ArrayList();
-
         return youtubeList.size();
     }
+
     public boolean create(Youtube videos) {
         Connection conexao = mysql.getConnection();
         LocalDate data = LocalDate.now();
@@ -45,7 +45,7 @@ public class YoutubeDao {
             return num > 0 ? true : false;
 
         } catch (final SQLException ex) {
-            System.out.println("Falha no banco de dados");
+            System.out.println("Falha no banco de dados.");
             ex.printStackTrace();
         } catch (final Exception ex) {
             ex.printStackTrace();
@@ -60,7 +60,6 @@ public class YoutubeDao {
     }
 
     public List<Youtube> read() {
-
         Connection conexao = mysql.getConnection();
         List<Youtube> youtubeList = new ArrayList();
 
@@ -118,8 +117,7 @@ public class YoutubeDao {
         }
         return false;
     }
-    public boolean delete(long
-                                  id) {
+    public boolean delete(long id) {
         Connection conexao = mysql.getConnection();
 
         try {
