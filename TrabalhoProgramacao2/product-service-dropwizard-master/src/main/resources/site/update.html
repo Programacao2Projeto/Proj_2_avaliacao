@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Atualizar Vídeos</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/site/sakura.css">
+</head>
+<body>
+<p><a href="index.html">&lt; Voltar para página inicial</a></p>
+<h1>Atualizar Vídeo</h1>
+<table>
+    <tr>
+    </tr>
+    <td>ID:</td>
+    <td id="idVideo"></td>
+    <tr>
+        <td>Nome:</td>
+        <td><input type="text" id="txtNome"></td>
+    </tr>
+    <tr>
+        <td>Nome Canal:</td>
+        <td><input type="text" id="txtNomeVideo"></td>
+    </tr>
+    <tr><td></td><td><input type="button" onclick="atualizarVideo()" value="Salvar"></td></tr>
+</table>
+<p style="font-weight:bold" id="mensagem"></p>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Nome do Vídeo</th>
+        <th>Nome do Canal</th>
+    </tr>
+    <tbody id="videos">
+    </tbody>
+
+</table>
+
+<script>
+        const corpoTabela = document.querySelector('#videos');
+        const paragrafoMensagem = document.querySelector('#mensagem');
+        const textoNome = document.querySelector('#txtNomeVideo');
+        const textoMatricula = document.querySelector('#txtNomeCanal');
+
+        const celulaID = document.querySelector('#idVideo');
+
+        function inicializar() {
+            paragrafoMensagem.innerHTML = 'Selecione um vídeo:'
+            celulaID.innerHTML = '';
+            textoNomeVideo.value = '';
+            textoNomeCanal.value = '';
+            listarTodosVideos();
+            }
+
+        function selecionarVideo(id, nome, matricula) {
+                paragrafoMensagem.innerHTML = 'Altere os vídeos e pressione o botão Salvar.'
+                celulaID.innerHTML = id;
+                textoNomeVideo.value = nomeVideo;
+                textoNomeCanal.value = nomeCanal;
+            }
+
+        async function atualizarVideo() {
+                if (celulaID.innerHTML == '') return;
+                const ID = celulaID.innerHTML;
+                const URL = `/api/videos/${ID}`;
+
+          const dadosVideo = {
+                    'id': ID,
+                    'nomevideo': textoNomeVideo.value,
+                    'nomecanal': textoNomeCanal.value
+         };
+
+        const putRequest = {
+                method:'PUT',
+                body: JSON.stringify(dadosVideo),
+         headers: { 'Content-type': 'application/json;charset=UTF-8' }
+        };
+
+        try {
+                fetch(URL, putRequest).then(resposta => resposta.json()).then(jsonResponse => inicializar());
+            } catch (e) {
+        corpoTabela.innerHTML = e;
+            }
+    }
+
+    function preencherTabela(videos) {
+            var linhasTabela = '';
+            var v = videos.length;
+            for (var i = 0; i < n; i++) {
+                var video = videos[i];
+                linhasTabela +=
+                `<tr><td><a href="javascript:void(0)" onclick="selecionarVideo('${video.id}','${video.nomevideo}','${video.nomecanal}')">`
+                + video.id + '</a></td>' +
+                '<td>' + video.nomevideo + '</td>' +
+                '<td>' + video.nomecanal + '</td></tr>\n';
+        }
+
+        corpoTabela.innerHTML = linhasTabela;
+     }
+
+        async function listarTodosVideos() {
+                const URL = `/api/videos`;
+            try {
+                fetch(URL).then(resposta => resposta.json()).then(jsonResponse => preencherTabela(jsonResponse));
+                } catch (e) {
+                corpoTabela.innerHTML = e;
+                }
+}
+inicializar();
+</script>
+</body>
+</html>

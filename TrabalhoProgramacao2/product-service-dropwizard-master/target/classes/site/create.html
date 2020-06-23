@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Professores (create)</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/site/sakura.css">
+</head>
+<body>
+<p><a href="/site">&lt; Voltar para página inicial</a></p>
+<h1>Enviar video</h1>
+<table>
+    <tr>
+        <td>Nome Video:</td>
+        <td><input type="text" id="txtVideo"></td>
+    </tr>
+    <tr>
+        <td>Nome canal:</td>
+        <td><input type="text" id="txtCanel"></td>
+    </tr>
+    <tr><td></td><td><input type="button" onclick="criarProfessor()" value="Criar"></td></tr>
+</table>
+<p style="font-weight:bold" id="mensagem"></p>
+<script>
+         const textoNome = document.querySelector('#txtVideo');
+         const textoCanal = document.querySelector('#txtCanal');
+         const paragrafoMensagem = document.querySelector('#mensagem');
+
+            function mostrarMensagem(videoCadastrado)
+             {
+                    textoNome.value = '';
+                    textoCanal.value = '';
+                    paragrafoMensagem.innerHTML = 'Video criado com id ' + videoCadastrado.id;
+              }
+
+            async function criarProfessor() {
+            const URL = `/api/videos`;
+
+            const dadosVideo =
+             {
+            'nomevideo': textoNome.value,
+            'nomecanal': textoCanal.value
+            };
+
+           const postRequest =
+           {
+                    method:'POST',
+                    body: JSON.stringify(dadosVideo),
+                    headers: { 'Content-type': 'application/json;charset=UTF-8' }
+            };
+
+           try {
+                fetch(URL, postRequest).then(resposta => resposta.json()).then(jsonResponse => mostrarMensagem(jsonResponse));
+           } catch (e) {
+                        corpoTabela.innerHTML = e;
+                    }
+            }
+</script>
+</body>
+</html>
