@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Youtube Lista Vídeos</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body style="background-color: #FCFCFC; text-align: center;padding:50px">
+    <p style="text-align: left; font-family: 'Lucida Console', Monaco, monospace; font-size: 15px"><a href="/index.html">&lt; Voltar para página inicial</a></p>
+    
+    <h1><b style="color:red; font-family:'Arial Black', Gadget, sans-serif">Youtube</b> statistics</h1>
+<br><br>
+    <a href="/create.html"><button type="button" class="btn btn-dark" style="border-radius: 7px"><b style="font-size: 15px">INSERIR NOVO VÍDEO</b></button></a>
+    <a href="/update.html"><button type="button" class="btn btn-dark" style="border-radius: 7px"><b style="font-size: 15px">EDITAR VÍDEO</b></button></a>
+    <a href="/delete.html"><button type="button" class="btn btn-dark" style="border-radius: 7px"><b style="font-size: 15px">DELETAR VÍDEO</b></button></a>
+    <a href="/listar.html"><button type="button" class="btn btn-dark" style="border-radius: 7px"><b style="font-size: 15px">VISUALIZAR TODOS OS VÍDEOS</b></button></a>
+    <br><br><br><hr><br>
+    
+     <h1 style="font-family: 'Lucida Console', Monaco, monospace; font-size: 30px "><b>Gráfico</b></h1>
+    <br>
+    <p style="font-family: 'Lucida Console', Monaco, monospace; color:red; font-size: 20px"><b>Vídeos Postados na Semana</b></p>
+    <br><br><br>
+
+        <!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+    
+<script>
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 860 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+//Read the data
+d3.json("http://localhost:8080/api/videos/dados",
+  // Now I can use this dataset:
+  function(data) {
+
+// Format date
+    var	parseDate = d3.timeParse("%Y-%m");
+    data = data.map(function(d) {
+      d.date = parseDate(d.date);
+      let newData = {
+        date: d.date,
+        value: d.value // Mude aqui o campo do json
+      }
+      return newData;
+    });
+
+
+    // filte data
+    data = data.filter(function(d) {return d.value != null;});
+
+// Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.date; }))
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Max value observed:
+    const max = d3.max(data, function(d) { return +d.value; })
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0, max])
+      .range([ height, 0 ]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    // Set the gradient
+    svg.append("linearGradient")
+      .attr("id", "line-gradient")
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", 0)
+      .attr("y1", y(0))
+      .attr("x2", 0)
+      .attr("y2", y(max))
+      .selectAll("stop")
+        .data([
+          {offset: "0%", color: "black"},
+          {offset: "100%", color: "red"}
+        ])
+      .enter().append("stop")
+        .attr("offset", function(d) { return d.offset; })
+        .attr("stop-color", function(d) { return d.color; });
+
+    // Add the line
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "url(#line-gradient)" )
+      .attr("stroke-width", 2)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.date) })
+        .y(function(d) { return y(d.value) })
+        )
+
+         // Add the points
+    svg
+      .append("g")
+      .selectAll("dot")
+      .data(data)
+      .enter()
+      .append("circle")
+        .attr("cx", function(d) { return x(d.date) } )
+        .attr("cy", function(d) { return y(d.value) } )
+        .attr("r", 4)
+        .attr("fill", "black")
+
+})
+</script>
+</body>
+</html>

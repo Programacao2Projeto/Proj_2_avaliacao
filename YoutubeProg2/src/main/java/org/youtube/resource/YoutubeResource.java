@@ -2,7 +2,7 @@ package org.youtube.resource;
 
 import org.youtube.api.Youtube;
 import org.youtube.db.YoutubeDao;
-
+import org.youtube.api.Results;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -32,6 +32,13 @@ public class YoutubeResource {
         return youtube;
     }
 
+    @GET
+    @Path("/dados")
+    public  List<Results> getDados()
+    {
+        return  this.youtubeDao.lerdados();
+    }
+
     @DELETE
     @Path("/{id}")
     public Response deleteVideo(@PathParam("id") long id) {
@@ -43,7 +50,7 @@ public class YoutubeResource {
     }
 
     @PUT
-       public Youtube updateVideo(Youtube youtube) {
+    public Youtube updateVideo(Youtube youtube) {
         if(youtubeDao.update(youtube)){
             return youtube;
         }

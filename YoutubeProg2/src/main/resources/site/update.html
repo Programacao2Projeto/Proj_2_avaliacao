@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Atualizar video</title>
+    <title>Atualizar Vídeo</title>
     <meta charset="UTF-8">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -10,31 +10,42 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
 <body style="background-color: #FCFCFC; text-align: center;padding:50px">
-<p><a href="/index.html">&lt; Voltar para página inicial</a></p>
-<h1>Atualizar professor</h1>
+<p style="text-align: left; font-family: 'Lucida Console', Monaco, monospace; font-size: 15px"><a href="/index.html">&lt; Voltar para página inicial</a></p>
+<h1><b style="color:red; font-family:'Arial Black', Gadget, sans-serif">Youtube</b> statistics</h1>
+    
+    <br><br>
+    <a href="/create.html"><button type="button" class="btn btn-dark" style="border-radius: 7px"><b style="font-size: 15px">INSERIR NOVO VÍDEO</b></button></a>
+    <a href="/delete.html"><button type="button" class="btn btn-dark" style="border-radius: 7px"><b style="font-size: 15px">DELETAR VÍDEO</b></button></a>
+    <a href="/listar.html"><button type="button" class="btn btn-dark" style="border-radius: 7px"><b style="font-size: 15px">VISUALIZAR TODOS OS VÍDEOS</b></button></a>
+    <a href="/grafico.html"><button type="button" class="btn btn-dark" style="border-radius: 7px"><b style="font-size: 15px">VISUALIZAR GRÁFICO</b></button></a>
+    <br><br><br><hr><br>
+    
+    <h1 style="text-align: center; font-family: 'Lucida Console', Monaco, monospace; font-size: 30px"><b>Atualizar Vídeo</b></h1>
+    
 <table class="table" style="margin-left:25px; margin-rigth:25px">
     <tr>
     </tr>
-    <tbody>>
-    <td>ID:</td>
+    <tbody>
+    <td style= "font-family: 'Lucida Console', Monaco, monospace; font-size: 15px">ID:</td>
     <td id="idVideo"></td>
     <tr>
-        <td>Nome video:</td>
+        <td style= "font-family: 'Lucida Console', Monaco, monospace; font-size: 15px">Nome Vídeo:</td>
         <td><input type="text" id="txtNomeVideo"></td>
     </tr>
     <tr>
-        <td>Nome canal:</td>
+        <td style= "font-family: 'Lucida Console', Monaco, monospace; font-size: 15px">Nome Canal:</td>
         <td><input type="text" id="txtNomeCanal"></td>
     </tr>
     <tr><td></td><td><input type="button" class="btn btn-dark" onclick="atualizarVideo()" value="Salvar"></td></tr>
     </tbody>
+    <br>
 </table>
-<p style="font-weight:bold" id="mensagem"></p>
+<p style="font-weight:bold; font-weight:bold; font-family:'Trebuchet MS', Helvetica, sans-serif; font-size: 20px; color: red" id="mensagem"></p>
 <table class='table' style='margin-left:25px; margin-rigth:25px'>
-    <tr>
+    <tr style= "background-color: darkgray; font-family: 'Lucida Console', Monaco, monospace; font-size: 17px">
         <th>ID</th>
-        <th>Nome Video</th>
-        <th>Canal</th>
+        <th>Nome do Vídeo</th>
+        <th>Nome do Canal</th>
     </tr>
     <tbody id="videos">
     </tbody>
@@ -47,7 +58,7 @@
           const celulaID = document.querySelector('#idVideo');
 
             function inicializar() {
-                paragrafoMensagem.innerHTML = 'Selecione um video para atualizar:'
+                paragrafoMensagem.innerHTML = 'Selecione um vídeo para atualizar:'
                 celulaID.innerHTML = '';
                 textoNomeVideo.value = '';
                 textoNomeCanal.value = '';
@@ -56,7 +67,7 @@
 
 
             function selecionarVideo(id, nome, canal) {
-                paragrafoMensagem.innerHTML = 'Apos alterar os dados clique em salvar.'
+                paragrafoMensagem.innerHTML = 'Após alterar os dados clique em salvar.'
                 celulaID.innerHTML = id;
                 textoNomeVideo.value = nome;
                 textoNomeCanal.value = canal;

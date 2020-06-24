@@ -16,7 +16,7 @@ import java.util.EnumSet;
 
 public class App extends Application<Configuration>
 {
-    public static void main( String[] args ) throws Exception {
+    public static void main(String[] args ) throws Exception {
         (new App()).run(new String[] {"server"});
 
     }
@@ -27,7 +27,7 @@ public class App extends Application<Configuration>
     }
 
     @Override
-    public void initialize(Bootstrap<Configuration> bootstrap) {
+    public void initialize(Bootstrap <Configuration> bootstrap) {
         AssetsBundle assetsBundle = new AssetsBundle("/site","/","index.html");
         bootstrap.addBundle(assetsBundle);
     }

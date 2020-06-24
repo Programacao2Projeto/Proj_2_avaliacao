@@ -1,7 +1,7 @@
 package org.youtube.db;
 
-
 import org.joda.time.LocalDate;
+import org.youtube.api.Results;
 import org.youtube.api.Youtube;
 import java.sql.Connection;
 import java.sql.Date;
@@ -20,14 +20,16 @@ public class YoutubeDao {
     private String readSQL = "select * from youtube";
     private String updateSQL = "update youtube set nomevideo = ?, nomecanal = ? where id = ?";
     private String deleteSQL = "delete from youtube  where id = ?";
+    private String lerdadosSQL = "SELECT  COUNT(id), concat(YEAR(dataenvio),'-', MONTH(dataenvio)) AS DATA FROM youtube GROUP BY YEAR(dataenvio), MONTH(dataenvio)";
+
 
     private final MySQLConnection mysql = new MySQLConnection();//
-
     public int size(){
+
         List<Youtube> youtubeList = new ArrayList();
+
         return youtubeList.size();
     }
-
     public boolean create(Youtube videos) {
         Connection conexao = mysql.getConnection();
         LocalDate data = LocalDate.now();
@@ -45,7 +47,7 @@ public class YoutubeDao {
             return num > 0 ? true : false;
 
         } catch (final SQLException ex) {
-            System.out.println("Falha no banco de dados.");
+            System.out.println("Falha no banco de dados");
             ex.printStackTrace();
         } catch (final Exception ex) {
             ex.printStackTrace();
@@ -60,6 +62,7 @@ public class YoutubeDao {
     }
 
     public List<Youtube> read() {
+
         Connection conexao = mysql.getConnection();
         List<Youtube> youtubeList = new ArrayList();
 
@@ -141,4 +144,38 @@ public class YoutubeDao {
         }
         return false;
     }
+
+
+    public List<Results> lerdados() {
+        Connection conexao = mysql.getConnection();
+        List<Results> r = new ArrayList();
+
+        try {
+            PreparedStatement stm = conexao.prepareStatement(lerdadosSQL);
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                Results results = new Results();
+                results.setDate(rs.getString("DATA"));
+                results.setValue(rs.getLong("COUNT(id)"));
+                r.add(results);
+            }
+
+            return r;
+
+        } catch (final SQLException ex) {
+            System.out.println("Falha de conexão com a base de dados!");
+            ex.printStackTrace();
+        } catch (final Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                conexao.close();
+            } catch (final Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return r;
+    }
+
 }
